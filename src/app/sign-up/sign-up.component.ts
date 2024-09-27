@@ -10,6 +10,11 @@ import { from, Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon'; // Import MatIconModule
 import { error, log } from 'console';
 import { ApiServiceService } from '../api-service.service';
+import { ErrorServiceClass } from '../errorInceptor';
+
+
+
+
 
 
 
@@ -23,6 +28,7 @@ import { ApiServiceService } from '../api-service.service';
 })
 @Injectable({providedIn: 'root'})
 export class SignUpComponent {
+  errMesg: any
   hide: boolean = true
   signUpForm: FormGroup
   formErrors: any = {username: ''};
@@ -40,7 +46,7 @@ export class SignUpComponent {
     const formData = this.signUpForm.value
 
         //this.passwordsMisMatchValidator()
-     if (this.signUpForm) {
+     if (this.signUpForm.valid) {
       
     
 
@@ -50,58 +56,71 @@ export class SignUpComponent {
       this.apiService.registerUser(extractCredentialValues)
     .subscribe({next: (data) => {
       console.log(data);
+    
+      
+    },error: (error) => {
+      if (error.error === undefined) {
+        console.log(error.error);
+        
 
-      
-    },error: (error) => { console.log(error);}
-    
-  }
-    )
-  }
-      
-  //   }, error: (error) => {
-  //     if (error.status === 400 && error.error.errors) {
-  //       this.handleServerSideValidationErrors(error.error.errors)
-    
         
+      
+        const errorMessage = new ErrorServiceClass()
+         this.errMesg = errorMessage.errorMessage
+      
+        this.handleServerSideValidationErrors(this.errMesg)
         
-  //     } else {
-  //       console.log('An unexpected error occurred', error);
-  //     }
-  //   } 
-  //   })
-  // }
-  // }
-  // handleServerSideValidationErrors(errors: any[]) {
-    
-    
-  //   // Check if errors is an object with key-value pairs for each field
-  //   if (errors && typeof errors === 'object') {
-  //     // Iterate over each error in the object
-  //     Object.entries(errors).forEach(([field, errorMessage]) => {
-  //       console.log(`Setting error for ${field}: ${errorMessage}`);
-  //       // Set the error on the corresponding form control
-  //       const control = this.signUpForm.get(field);
-  //       if (control) {
-  //         control.setErrors({ serverError: errorMessage });
-  //         control.markAsTouched();  // Make sure the field is marked as touched to show the error
           
-  //       }
-  //     });
-  //   } else {
-  //     console.error('Unexpected error format:', errors);
-  //   }
-  // }
+        
+    } else {
+        
+      const errorMessage = new ErrorServiceClass()
+      console.log(this.errMesg = errorMessage.errorMessage);
       
-  //     passwordsMisMatchValidator():any{
-  //       const password = this.signUpForm.get('password')?.value
-  //       const confirmPassword =this.signUpForm.get('confirmPassword')?.value
-  //       return confirmPassword !== password? this.signUpForm.get('confirmPassword')?.setErrors({mismatchPasswordsError: 'Passwords do not match'}): false
-  //     }
     }
+  }}
+    
+    
+  )}
+  }
+      
+ 
+  //      
+    
+    
+    
+    
+  
+  
+  handleServerSideValidationErrors(errors: any[]) {
+    
+    // Check if errors is an object with key-value pairs for each field
+    if (errors && typeof errors === 'object') {
+      // Iterate over each error in the object
+      Object.entries(errors).forEach(([field, errorMessage]) => {
+        console.log(`Setting error for ${field}: ${errorMessage}`);
+        // Set the error on the corresponding form control
+        const control = this.signUpForm.get(field);
+        if (control) {
+          control.setErrors({ serverError: errorMessage });
+          control.markAsTouched();  // Make sure the field is marked as touched to show the error
+          
+        }
+      });
+    } else {
+      console.error('Unexpected error format:', errors);
+    }
+  }
+      
+      passwordsMisMatchValidator():any{
+        const password = this.signUpForm.get('password')?.value
+        const confirmPassword =this.signUpForm.get('confirmPassword')?.value
+        return confirmPassword !== password? this.signUpForm.get('confirmPassword')?.setErrors({mismatchPasswordsError: 'Passwords do not match'}): false
+      }
+    
   togglePasswordVisibility(): boolean{
  return this.hide= !this.hide
 
-
+  }
   
   }
-}

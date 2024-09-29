@@ -57,10 +57,17 @@ export class SignUpComponent {
       console.log(data);
     
       
-    },error: (error) => {
-      console.error
-      (error);
+    }, error: (error) => {
+    console.log(error.errorMessage);
+    if (error.error instanceof ErrorEvent) {
+      console.log('client side errors');
       
+      
+    }else {this.handleServerSideValidationErrors(error.errorMessage)
+    }
+    
+    }
+     })
 
         
 
@@ -69,7 +76,6 @@ export class SignUpComponent {
       //  const errorMessage = new ErrorServiceClass()
         // this.errMesg = errorMessage.errorMessage
       
-        this.handleServerSideValidationErrors(this.errMesg)
         
           
         
@@ -82,8 +88,8 @@ export class SignUpComponent {
   }}
     
     
-  )}
-  }
+  
+  
       
  
   //      

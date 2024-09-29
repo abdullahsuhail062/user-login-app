@@ -7,22 +7,21 @@ throwError
 export class ErrorServiceClassService{
     errorMessage: any
     clientSideError: any
-
+constructor(){}
     errorInserptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>>{      
-    return next(req).pipe(catchError((error)=> this.handleError(error))) 
-        
-    
-} 
+    return next(req).pipe(catchError(this.handleError))
+       
+    }
+   
 
-
-  handleError =(error: HttpErrorResponse)=> {
+  handleError=(error: HttpErrorResponse)=> {
     console.log(error);
     
     
 
     if (error.error instanceof ErrorEvent) {
       // Client-side error
-      this.clientSideError = `Client Error: ${error.error}`;
+      this.errorMessage = `Client Error: ${error.error}`;
       
     } else {
       // Server-side error
@@ -39,5 +38,5 @@ export class ErrorServiceClassService{
     // Propagate the error using throwError
     return throwError(() => new Error(this.errorMessage));
   }
-
+  
 }

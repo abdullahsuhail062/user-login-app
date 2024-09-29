@@ -10,8 +10,7 @@ import { from, Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon'; // Import MatIconModule
 import { error, log } from 'console';
 import { ApiServiceService } from '../api-service.service';
-import { ErrorServiceClass } from '../errorInceptor';
-
+import { ErrorServiceClassService } from '../error-service-class.service';
 
 
 
@@ -32,7 +31,7 @@ export class SignUpComponent {
   hide: boolean = true
   signUpForm: FormGroup
   formErrors: any = {username: ''};
-  constructor(private apiService: ApiServiceService){
+  constructor(private errorService: ErrorServiceClassService,private apiService: ApiServiceService){
     this.signUpForm = new FormGroup({username: new FormControl('',[Validators.required,Validators.minLength(3),Validators.pattern('^[a-zA-Z0-9]*')])
       ,email: new FormControl('',[Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@example\.(com|org|net)$/)]),password: new FormControl('',[Validators.required,Validators.minLength(6),Validators.pattern('^[a-zA-Z0-9]*')]),confirmPassword: new FormControl('',[Validators.required,Validators.minLength(6)])}) 
     }
@@ -46,7 +45,7 @@ export class SignUpComponent {
     const formData = this.signUpForm.value
 
         //this.passwordsMisMatchValidator()
-     if (this.signUpForm.valid) {
+     if (this.signUpForm.invalid) {
       
     
 
@@ -59,25 +58,27 @@ export class SignUpComponent {
     
       
     },error: (error) => {
-      if (error.error === undefined) {
-        console.log(error.error);
+      console.error
+      (error);
+      
+
         
 
         
       
-        const errorMessage = new ErrorServiceClass()
-         this.errMesg = errorMessage.errorMessage
+      //  const errorMessage = new ErrorServiceClass()
+        // this.errMesg = errorMessage.errorMessage
       
         this.handleServerSideValidationErrors(this.errMesg)
         
           
         
-    } else {
+    
         
-      const errorMessage = new ErrorServiceClass()
-      console.log(this.errMesg = errorMessage.errorMessage);
+      //const errorMessage = new ErrorServiceClass()
+      //console.log(this.errMesg = errorMessage.errorMessage);
       
-    }
+    
   }}
     
     

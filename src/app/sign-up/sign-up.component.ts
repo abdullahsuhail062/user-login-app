@@ -44,11 +44,8 @@ export class SignUpComponent {
   onSubmit(): void{
     const formData = this.signUpForm.value
 
-        //this.passwordsMisMatchValidator()
-     if (this.signUpForm.invalid) {
-      
-    
-
+        this.passwordsMisMatchValidator()
+     if (this.signUpForm.valid) {
     const formData = this.signUpForm.value
    const extractCredentialValues ={username: this.signUpForm.get('username')?.value,email: this.signUpForm.get('email')?.value, password: this.signUpForm.get('password')?.value,
       formData}
@@ -68,37 +65,8 @@ export class SignUpComponent {
     
     }
      })
-
-        
-
-        
-      
-      //  const errorMessage = new ErrorServiceClass()
-        // this.errMesg = errorMessage.errorMessage
-      
-        
-          
-        
-    
-        
-      //const errorMessage = new ErrorServiceClass()
-      //console.log(this.errMesg = errorMessage.errorMessage);
-      
     
   }}
-    
-    
-  
-  
-      
- 
-  //      
-    
-    
-    
-    
-  
-  
   handleServerSideValidationErrors(errors: any[]) {
     
     // Check if errors is an object with key-value pairs for each field
